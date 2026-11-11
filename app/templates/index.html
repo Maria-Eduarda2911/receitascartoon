@@ -16,7 +16,9 @@
 <div class="grid">
   {% for r in receitas %}
   <a class="card" href="/receita/{{ r.id }}">
-    <div class="topo" style="background:{{ r.cor }}33">{{ r.emoji }}</div>
+    <div class="card-thumb" style="background-image: url('{{ r.imagem }}');">
+      <span class="card-badge">{{ r.desenho }}</span>
+    </div>
     <div class="corpo">
       <h3>{{ r.titulo }}</h3>
       <span class="tag" style="background:{{ r.cor }}55">{{ r.desenho }}</span>

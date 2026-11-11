@@ -2,10 +2,17 @@
 {% block titulo %}{{ r.titulo }}{% endblock %}
 {% block conteudo %}
 <div class="caixa">
-  <a href="/">&larr; Voltar ao catálogo</a>
-  <h2>{{ r.emoji }} {{ r.titulo }}</h2>
-  <span class="tag" style="background:{{ r.cor }}55">{{ r.desenho }}</span>
+  <div class="topo-receita">
+    <div>
+      <a href="/">&larr; Voltar ao catálogo</a>
+      <h2>{{ r.titulo }}</h2>
+    </div>
+    <span class="tag" style="background:{{ r.cor }}55">{{ r.desenho }}</span>
+  </div>
+
+  <div class="recipe-hero" style="background-image: url('{{ r.imagem }}');"></div>
   <p>{{ r.descricao }}</p>
+
   <div class="meta">
     <span class="tag">⏱ {{ r.tempo_min }} min</span>
     <span class="tag">🍽 {{ r.porcoes }} porções</span>

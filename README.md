@@ -1,5 +1,10 @@
 # Receitas Toon - Catálogo de receitas de desenhos animados
 
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.0.3-000000?logo=flask&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-326CE5?logo=kubernetes&logoColor=white)
+
 Disciplina: Tópicos Especiais em Sistemas Operacionais (Linux e Docker)
 
 ## O que é
@@ -9,19 +14,45 @@ Funcionalidades: listar, buscar por nome, filtrar por desenho, ver detalhes
 (ingredientes e modo de preparo), curtir e cadastrar novas receitas.
 API JSON em `/api/receitas`.
 
+## Link de execução local
+A aplicação fica disponível em:
+
+- http://localhost:5000
+- ou, se a porta 5000 estiver ocupada, http://localhost:5005
+
+O script local detecta automaticamente uma porta disponível e informa a URL correta no terminal.
+
+> Se a porta 5000 estiver sendo usada por outra app antiga, o projeto não sobe na mesma porta. Isso é o motivo do erro interno em algumas execuções locais.
+
 ## Arquitetura
 Navegador -> Service (NodePort) -> 3 pods `receitas-web` (Flask) -> Service -> pod `postgres` (volume persistente)
 
 ## Tecnologias
 Linux, Docker, Kubernetes (minikube), Python/Flask, PostgreSQL.
 
-## Opção 1: só Docker
+## Opção 1: execução local rápida
+Este é o modo mais simples para ver o projeto funcionando no computador.
+
 ```bash
-docker compose up --build
-# abra http://localhost:8080
+chmod +x run_local.sh
+./run_local.sh
 ```
 
-## Opção 2: Kubernetes (minikube)
+Depois abra:
+
+```text
+http://localhost:5000
+```
+
+> Esse script usa o modo local com SQLite para funcionar sem depende de Docker ou PostgreSQL no ambiente.
+
+## Opção 2: Docker Compose
+```bash
+docker compose up --build
+# abre em http://localhost:8080
+```
+
+## Opção 3: Kubernetes (minikube)
 ```bash
 minikube start --driver=docker
 
@@ -43,6 +74,17 @@ minikube service receitas-web --url
 - PersistentVolumeClaim (dados do banco não se perdem)
 - Probes de saúde (readiness e liveness)
 - Limites de CPU e memória por container
+
+## Como testar a aplicação
+```bash
+curl http://localhost:5000/health
+```
+
+Você deve receber:
+
+```text
+ok
+```
 
 ## Demonstração
 ```bash
