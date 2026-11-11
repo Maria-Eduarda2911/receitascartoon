@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block titulo %}{{ r.titulo }}{% endblock %}
+{% block conteudo %}
+<div class="caixa">
+  <a href="/">&larr; Voltar ao catálogo</a>
+  <h2>{{ r.emoji }} {{ r.titulo }}</h2>
+  <span class="tag" style="background:{{ r.cor }}55">{{ r.desenho }}</span>
+  <p>{{ r.descricao }}</p>
+  <div class="meta">
+    <span class="tag">⏱ {{ r.tempo_min }} min</span>
+    <span class="tag">🍽 {{ r.porcoes }} porções</span>
+    <span class="tag">{{ r.dificuldade }}</span>
+    <span class="tag">❤ {{ r.curtidas }} curtidas</span>
+  </div>
+
+  <h3>Ingredientes</h3>
+  <ul>{% for i in ingredientes %}<li>{{ i }}</li>{% endfor %}</ul>
+
+  <h3>Modo de preparo</h3>
+  <ol>{% for p in passos %}<li>{{ p }}</li>{% endfor %}</ol>
+
+  <form method="post" action="/receita/{{ r.id }}/curtir">
+    <button type="submit">❤ Curtir esta receita</button>
+  </form>
+</div>
+{% endblock %}

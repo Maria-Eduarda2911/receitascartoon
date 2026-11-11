@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block titulo %}Nova receita{% endblock %}
+{% block conteudo %}
+<div class="caixa">
+  <h2>Cadastrar nova receita</h2>
+  <form method="post" action="/nova">
+    <label>Título</label>
+    <input type="text" name="titulo" required>
+    <label>Desenho animado</label>
+    <select name="desenho_id">
+      {% for x in desenhos %}<option value="{{ x.id }}">{{ x.emoji }} {{ x.nome }}</option>{% endfor %}
+    </select>
+    <label>Descrição curta</label>
+    <input type="text" name="descricao" required>
+    <label>Tempo de preparo (minutos)</label>
+    <input type="number" name="tempo_min" value="30" min="1" required>
+    <label>Porções</label>
+    <input type="number" name="porcoes" value="2" min="1" required>
+    <label>Dificuldade</label>
+    <select name="dificuldade"><option>Fácil</option><option>Média</option><option>Difícil</option></select>
+    <label>Ingredientes (um por linha)</label>
+    <textarea name="ingredientes" rows="6" required></textarea>
+    <label>Modo de preparo (um passo por linha)</label>
+    <textarea name="preparo" rows="6" required></textarea>
+    <p><button type="submit">Salvar receita</button></p>
+  </form>
+</div>
+{% endblock %}

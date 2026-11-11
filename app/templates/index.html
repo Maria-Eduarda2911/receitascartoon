@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<form class="busca" method="get" action="/">
+  <input type="text" name="q" value="{{ q }}" placeholder="Buscar receita...">
+  {% if d %}<input type="hidden" name="desenho" value="{{ d }}">{% endif %}
+  <button type="submit">Buscar</button>
+</form>
+
+<div class="chips">
+  <a class="chip {{ 'ativo' if not d }}" href="/">Todos</a>
+  {% for x in desenhos %}
+  <a class="chip {{ 'ativo' if d == x.id|string }}" href="/?desenho={{ x.id }}">{{ x.emoji }} {{ x.nome }}</a>
+  {% endfor %}
+</div>
+
+<div class="grid">
+  {% for r in receitas %}
+  <a class="card" href="/receita/{{ r.id }}">
+    <div class="topo" style="background:{{ r.cor }}33">{{ r.emoji }}</div>
+    <div class="corpo">
+      <h3>{{ r.titulo }}</h3>
+      <span class="tag" style="background:{{ r.cor }}55">{{ r.desenho }}</span>
+      <p>{{ r.descricao }}</p>
+      <span class="tag">⏱ {{ r.tempo_min }} min</span>
+      <span class="tag">{{ r.dificuldade }}</span>
+      <span class="tag">❤ {{ r.curtidas }}</span>
+    </div>
+  </a>
+  {% else %}
+  <p>Nenhuma receita encontrada.</p>
+  {% endfor %}
+</div>
+{% endblock %}
