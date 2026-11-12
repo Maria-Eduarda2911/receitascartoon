@@ -1,0 +1,12 @@
+{# Moldura da cena: print do episódio (se existir) + legenda com desenho e episódio. #}
+{% macro tela(r, eager=false) -%}
+<figure class="tela{{ '' if r.imagem else ' tela--vazia' }}" style="--c: {{ r.cor }}">
+  {% if r.imagem -%}
+  <img src="{{ r.imagem }}" loading="{{ 'eager' if eager else 'lazy' }}"
+       alt="{% if r.cena %}Cena de {{ r.desenho }}, {{ r.cena.episodio }}: {{ r.cena.cena }}{% else %}{{ r.titulo }}{% endif %}">
+  {%- else -%}
+  <span class="emoji" aria-hidden="true">{{ r.emoji }}</span>
+  {%- endif %}
+  <figcaption class="chyron"><b>{{ r.desenho }}</b>{% if r.cena %}<span>{{ r.cena.episodio }}</span>{% endif %}</figcaption>
+</figure>
+{%- endmacro %}

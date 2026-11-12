@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Receitas Cartoon - Assets</title>
+    <style>
+      :root {
+        --bg: #1f1a3d;
+        --panel: #2e2857;
+        --accent: #ffb703;
+        --text: #fff7f0;
+        --muted: #d8cfe9;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #1f1a3d, #5a3d86);
+        color: var(--text);
+        font-family: Arial, sans-serif;
+      }
+      .card {
+        width: min(720px, 90vw);
+        background: rgba(46, 40, 87, 0.9);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 18px;
+        padding: 32px;
+        box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 4vw, 3rem);
+      }
+      p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .tag {
+        display: inline-block;
+        margin-top: 16px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255, 183, 3, 0.15);
+        border: 1px solid rgba(255, 183, 3, 0.5);
+        color: var(--accent);
+        font-weight: bold;
+      }
+      a {
+        color: #ffd166;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Receitas Cartoon</h1>
+      <p>
+        Esta é a página estática da pasta <strong>/static</strong>. Aqui você pode colocar imagens
+        e outros arquivos públicos do projeto.
+      </p>
+      <p>
+        Para usar imagens manuais, coloque os arquivos em <strong>/app/static/images</strong>
+        e acesse pelo caminho: <code>/static/images/nome-do-arquivo.png</code>
+      </p>
+      <div class="tag">Pasta estática pronta para uso</div>
+    </main>
+  </body>
+</html>

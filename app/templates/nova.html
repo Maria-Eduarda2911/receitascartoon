@@ -1,28 +1,80 @@
 {% extends "base.html" %}
-{% block titulo %}Nova receita{% endblock %}
+{% block titulo %}Nova receita | Receitas Toon{% endblock %}
 {% block conteudo %}
-<div class="caixa">
-  <h2>Cadastrar nova receita</h2>
-  <form method="post" action="/nova">
-    <label>Título</label>
-    <input type="text" name="titulo" required>
-    <label>Desenho animado</label>
-    <select name="desenho_id">
-      {% for x in desenhos %}<option value="{{ x.id }}">{{ x.emoji }} {{ x.nome }}</option>{% endfor %}
-    </select>
-    <label>Descrição curta</label>
-    <input type="text" name="descricao" required>
-    <label>Tempo de preparo (minutos)</label>
-    <input type="number" name="tempo_min" value="30" min="1" required>
-    <label>Porções</label>
-    <input type="number" name="porcoes" value="2" min="1" required>
-    <label>Dificuldade</label>
-    <select name="dificuldade"><option>Fácil</option><option>Média</option><option>Difícil</option></select>
-    <label>Ingredientes (um por linha)</label>
-    <textarea name="ingredientes" rows="6" required></textarea>
-    <label>Modo de preparo (um passo por linha)</label>
-    <textarea name="preparo" rows="6" required></textarea>
-    <p><button type="submit">Salvar receita</button></p>
-  </form>
-</div>
+<section class="intro">
+  <h1>Nova receita</h1>
+  <p>Cadastre um prato que aparece em um desenho. Ele entra no catálogo assim que você salvar.</p>
+</section>
+
+<form class="folha" method="post" action="{% if editando %}/receita/{{ receita.id }}/editar{% else %}/nova{% endif %}" enctype="multipart/form-data">
+  {% if erro %}<p class="erro">{{ erro }}</p>{% endif %}
+  <div class="form-grade">
+    <div class="cheio">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" name="titulo" value="{{ receita.titulo if receita else '' }}" required>
+    </div>
+    <div>
+      <label for="desenho_id">Desenho animado</label>
+      <select id="desenho_id" name="desenho_id">
+        {% for x in desenhos %}<option value="{{ x.id }}"{% if receita and receita.desenho_id == x.id %} selected{% endif %}>{{ x.emoji }} {{ x.nome }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="dificuldade">Dificuldade</label>
+      <select id="dificuldade" name="dificuldade">
+        {% for nivel in ['Fácil', 'Média', 'Difícil'] %}
+        <option value="{{ nivel }}"{% if receita and receita.dificuldade == nivel %} selected{% endif %}>{{ nivel }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="cheio">
+      <label for="descricao">Descrição curta</label>
+      <input id="descricao" type="text" name="descricao" value="{{ receita.descricao if receita else '' }}" required>
+    </div>
+    <div>
+      <label for="tempo_min">Tempo de preparo (minutos)</label>
+      <input id="tempo_min" type="number" name="tempo_min" value="{{ receita.tempo_min if receita else 30 }}" min="1" required>
+    </div>
+    <div>
+      <label for="porcoes">Porções</label>
+      <input id="porcoes" type="number" name="porcoes" value="{{ receita.porcoes if receita else 2 }}" min="1" required>
+    </div>
+    <div class="cheio">
+      <label for="novo_desenho">Adicionar nova categoria de desenho</label>
+      <input id="novo_desenho" type="text" name="novo_desenho" placeholder="Ex.: Dragon Ball">
+    </div>
+    <div>
+      <label for="novo_emoji">Emoji da categoria</label>
+      <input id="novo_emoji" type="text" name="novo_emoji" maxlength="2" placeholder="🐉">
+    </div>
+    <div>
+      <label for="nova_cor">Cor da categoria</label>
+      <input id="nova_cor" type="color" name="nova_cor" value="#7c3aed">
+    </div>
+    <div class="cheio">
+      <label for="imagem">Imagem da receita</label>
+      <input id="imagem" type="text" name="imagem" value="{{ receita.imagem if receita and receita.imagem else '' }}" list="imagens-disponiveis" placeholder="/static/images/hamburguer-siri.png">
+      <datalist id="imagens-disponiveis">
+        {% for img in imagens_disponiveis %}<option value="{{ img }}">{% endfor %}
+      </datalist>
+      <small class="dica">Use uma imagem já salva em /static/images ou envie uma nova abaixo.</small>
+    </div>
+    <div class="cheio">
+      <label for="arquivo_imagem">Enviar nova imagem</label>
+      <input id="arquivo_imagem" type="file" name="arquivo_imagem" accept=".jpg,.jpeg,.png,.webp,.svg,.gif,image/*">
+    </div>
+    <div class="cheio">
+      <label for="ingredientes">Ingredientes <span class="dica">um por linha</span></label>
+      <textarea id="ingredientes" name="ingredientes" rows="6" required>{{ receita.ingredientes if receita else '' }}</textarea>
+    </div>
+    <div class="cheio">
+      <label for="preparo">Modo de preparo <span class="dica">um passo por linha</span></label>
+      <textarea id="preparo" name="preparo" rows="6" required>{{ receita.preparo if receita else '' }}</textarea>
+    </div>
+  </div>
+  <div class="acoes">
+    <button class="btn" type="submit">{{ 'Salvar alterações' if editando else 'Salvar receita' }}</button>
+    <a class="btn btn-sec" href="{% if editando %}/receita/{{ receita.id }}{% else %}/{% endif %}">Cancelar</a>
+  </div>
+</form>
 {% endblock %}

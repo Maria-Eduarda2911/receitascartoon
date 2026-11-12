@@ -1,35 +1,48 @@
 {% extends "base.html" %}
+{% from "_tela.html" import tela %}
 {% block conteudo %}
-<form class="busca" method="get" action="/">
-  <input type="text" name="q" value="{{ q }}" placeholder="Buscar receita...">
+<section class="intro">
+  <h1>Receitas de desenhos animados</h1>
+  <p>Cada prato vem com a cena do episódio em que aparece e o passo a passo para fazer em casa.</p>
+</section>
+
+<form class="busca" method="get" action="/" role="search">
+  <label class="sr-only" for="q">Buscar receita</label>
+  <input id="q" type="search" name="q" value="{{ q }}" placeholder="Buscar receita" autocomplete="off">
   {% if d %}<input type="hidden" name="desenho" value="{{ d }}">{% endif %}
-  <button type="submit">Buscar</button>
+  <button class="btn" type="submit">Buscar</button>
 </form>
 
-<div class="chips">
-  <a class="chip {{ 'ativo' if not d }}" href="/">Todos</a>
+<nav class="chips" aria-label="Filtrar por desenho">
+  <a class="chip chip--todos" href="/{% if q %}?q={{ q|urlencode }}{% endif %}"{% if not d %} aria-current="true"{% endif %}>Todos</a>
   {% for x in desenhos %}
-  <a class="chip {{ 'ativo' if d == x.id|string }}" href="/?desenho={{ x.id }}">{{ x.emoji }} {{ x.nome }}</a>
+  <a class="chip" style="--c: {{ x.cor }}" href="/?desenho={{ x.id }}{% if q %}&amp;q={{ q|urlencode }}{% endif %}"{% if d == x.id|string %} aria-current="true"{% endif %}><span aria-hidden="true">{{ x.emoji }}</span> {{ x.nome }}</a>
   {% endfor %}
-</div>
+</nav>
 
-<div class="grid">
+{% set n = receitas|length %}
+{% if receitas %}
+<p class="resumo">{{ n }} {{ 'receita' if n == 1 else 'receitas' }}{% if q %} para “{{ q }}”{% endif %}</p>
+<ul class="grade">
   {% for r in receitas %}
-  <a class="card" href="/receita/{{ r.id }}">
-    <div class="card-thumb" style="background-image: url('{{ r.imagem }}');">
-      <span class="card-badge">{{ r.desenho }}</span>
-    </div>
-    <div class="corpo">
-      <h3>{{ r.titulo }}</h3>
-      <span class="tag" style="background:{{ r.cor }}55">{{ r.desenho }}</span>
-      <p>{{ r.descricao }}</p>
-      <span class="tag">⏱ {{ r.tempo_min }} min</span>
-      <span class="tag">{{ r.dificuldade }}</span>
-      <span class="tag">❤ {{ r.curtidas }}</span>
-    </div>
-  </a>
-  {% else %}
-  <p>Nenhuma receita encontrada.</p>
+  <li>
+    <a class="card" href="/receita/{{ r.id }}" style="--c: {{ r.cor }}">
+      {{ tela(r) }}
+      <div class="card-corpo">
+        <h2>{{ r.titulo }}</h2>
+        <p>{{ r.descricao }}</p>
+        <div class="meta"><span>{{ r.tempo_min }} min</span><span>{{ r.dificuldade }}</span><span>♥ {{ r.curtidas }}</span></div>
+      </div>
+    </a>
+  </li>
   {% endfor %}
+</ul>
+{% else %}
+<div class="vazio">
+  <p><b>Nenhuma receita encontrada{% if q %} para “{{ q }}”{% endif %}.</b></p>
+  <p>Tente outro nome ou veja todas as receitas.</p>
+  <a class="btn" href="/">Ver todas as receitas</a>
+  <a class="btn btn-sec" href="/nova">Cadastrar receita</a>
 </div>
+{% endif %}
 {% endblock %}

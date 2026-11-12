@@ -1,144 +1,31 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block titulo %}Receitas Toon{% endblock %}</title>
-<style>
-  :root{
-    --bg:#fffaf3;
-    --panel:#ffffff;
-    --panel-alt:#fff5d6;
-    --primary:#ff6b6b;
-    --primary-dark:#d94a4a;
-    --accent:#ffd166;
-    --text:#2d2a32;
-    --muted:#6d6473;
-    --shadow:0 18px 40px rgba(45, 42, 50, 0.1);
-    --radius:22px;
-  }
-
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:"Trebuchet MS",Arial,sans-serif;
-    background:linear-gradient(180deg,#fffaf3 0%,#fff4e9 100%);
-    color:var(--text);
-    margin:0;
-  }
-  a{text-decoration:none}
-  header{
-    background:linear-gradient(135deg,#ff7a59 0%,#ff6b6b 100%);
-    color:#fff;
-    padding:18px 24px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-    align-items:center;
-    justify-content:space-between;
-    box-shadow:0 12px 28px rgba(255,107,107,0.2);
-  }
-  header a{color:#fff}
-  header h1{margin:0;font-size:clamp(1.7rem,2vw,2.5rem);letter-spacing:.02em}
-  nav{display:flex;gap:12px;flex-wrap:wrap}
-  nav a{font-weight:700;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,0.12);backdrop-filter:blur(6px)}
-  main{max-width:1180px;margin:28px auto;padding:0 16px 30px}
-  .busca{display:flex;gap:10px;margin-bottom:20px}
-  .busca input{flex:1;padding:14px 16px;border:2px solid rgba(255,209,102,0.9);border-radius:14px;font-size:16px;box-shadow:0 6px 20px rgba(255,209,102,0.18)}
-  button,.btn{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:0;border-radius:12px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:0 12px 18px rgba(255,107,107,0.2)}
-  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
-  .chip{padding:8px 14px;border-radius:999px;background:#fff;border:2px solid rgba(255,209,102,0.9);color:var(--text);font-size:14px;font-weight:700;box-shadow:0 8px 16px rgba(45,42,50,0.04);transition:.2s}
-  .chip:hover{transform:translateY(-1px)}
-  .chip.ativo{background:linear-gradient(135deg,#ffe6a6,#ffd166);border-color:transparent}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-  .card{
-    background:var(--panel);
-    border-radius:var(--radius);
-    overflow:hidden;
-    box-shadow:var(--shadow);
-    color:inherit;
-    border:1px solid rgba(255,107,107,0.08);
-    transition:transform .2s ease, box-shadow .2s ease;
-  }
-  .card:hover{transform:translateY(-4px);box-shadow:0 22px 40px rgba(45,42,50,0.14)}
-  .card-thumb{
-    position:relative;
-    height:220px;
-    background-position:center;
-    background-size:cover;
-    border-bottom:4px solid rgba(255,255,255,0.5);
-    display:flex;
-    align-items:flex-end;
-    padding:16px;
-  }
-  .card-thumb::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(180deg,transparent 10%,rgba(0,0,0,0.38) 100%);
-  }
-  .card-badge{
-    position:relative;
-    z-index:1;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    background:rgba(255,255,255,0.9);
-    color:var(--text);
-    padding:8px 12px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:700;
-    backdrop-filter:blur(8px);
-  }
-  .card .corpo{padding:18px 18px 20px}
-  .card h3{margin:0 0 10px;font-size:1.45rem}
-  .card p{margin:12px 0 14px;line-height:1.5;color:var(--muted)}
-  .tag{display:inline-block;font-size:12px;padding:6px 10px;border-radius:999px;background:#f5f0ff;margin:4px 6px 0 0;font-weight:700;border:1px solid rgba(45,42,50,0.06);color:var(--text)}
-  .caixa{
-    background:var(--panel);
-    border-radius:var(--radius);
-    padding:24px;
-    box-shadow:var(--shadow);
-    border:1px solid rgba(255,107,107,0.08);
-  }
-  .caixa .topo-receita{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap}
-  .caixa h2{margin:10px 0 12px;font-size:clamp(1.8rem,3vw,2.8rem)}
-  .recipe-hero{
-    height:340px;
-    border-radius:18px;
-    background-size:cover;
-    background-position:center;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.3);
-    margin:18px 0 22px;
-  }
-  .meta{margin:14px 0 22px;display:flex;flex-wrap:wrap;gap:8px}
-  .meta .tag{background:var(--panel-alt)}
-  ul,ol{padding-left:20px;line-height:1.7;color:var(--text)}
-  li{margin-bottom:8px}
-  label{display:block;margin-top:14px;font-weight:700}
-  input[type=text],input[type=number],select,textarea{width:100%;padding:12px 14px;border:2px solid rgba(255,209,102,0.9);border-radius:12px;font-size:15px;font-family:inherit;background:#fff;box-shadow:0 8px 16px rgba(45,42,50,0.04)}
-  textarea{resize:vertical;min-height:150px}
-  footer{text-align:center;font-size:12px;color:var(--muted);padding:30px 10px 20px;line-height:1.7}
-  @media (max-width:640px){
-    .busca{flex-direction:column}
-    .card-thumb{height:180px}
-    .caixa{padding:18px}
-  }
-</style>
+<meta name="description" content="Receitas de pratos que aparecem em desenhos animados, com a cena do episódio.">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<header>
-  <a href="/"><h1>🍳 Receitas Toon</h1></a>
-  <nav><a href="/">Catálogo</a><a href="/nova">+ Nova receita</a></nav>
+<a class="pular" href="#conteudo">Ir para o conteúdo</a>
+<header class="topo">
+  <div class="topo-in">
+    <a class="logo" href="/">Receitas Toon</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="/"{% if request.path == '/' %} aria-current="page"{% endif %}>Catálogo</a>
+      <a class="nav-acao" href="/nova"{% if request.path == '/nova' %} aria-current="page"{% endif %}>Nova receita</a>
+    </nav>
+  </div>
 </header>
-<main>
+<main id="conteudo" class="pagina">
 {% block conteudo %}{% endblock %}
 </main>
-<footer>
-  Atendido pelo pod: <b>{{ pod }}</b><br>
-  Projeto acadêmico, sem fins comerciais. Receitas inspiradas em desenhos animados;
-  os personagens pertencem aos seus respectivos donos.
+<footer class="rodape">
+  <div class="rodape-in">
+    <p>Atendido pelo pod <b>{{ pod }}</b></p>
+    <p>Projeto acadêmico, sem fins comerciais. Receitas inspiradas em desenhos animados; personagens e imagens pertencem aos seus respectivos donos.</p>
+  </div>
 </footer>
 </body>
 </html>

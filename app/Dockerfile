@@ -8,6 +8,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py seed_data.py ./
 COPY templates/ templates/
+COPY static/ static/
 
 USER 1001
 EXPOSE 5000
