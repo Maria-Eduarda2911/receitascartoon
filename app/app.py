@@ -543,7 +543,12 @@ def api_receitas():
 
 @app.route("/health")
 def health():
-    return "ok"
+    try:
+        con = conectar()
+        con.close()
+        return "ok", 200
+    except Exception as e:
+        return f"database error: {str(e)}", 500
 
 
 iniciar_banco()
