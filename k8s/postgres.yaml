@@ -1,30 +1,24 @@
 apiVersion: v1
-kind: Secret
+kind: Service
 metadata:
-  name: receitas-secret
-type: Opaque
-stringData:
-  DB_USER: receitas
-  DB_PASSWORD: receitas123
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-pvc
+  name: postgres
+  labels:
+    app: postgres
 spec:
-  accessModes: ["ReadWriteOnce"]
-  resources:
-    requests:
-      storage: 1Gi
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: postgres
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
+  labels:
+    app: postgres
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app: postgres
@@ -35,40 +29,20 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: postgres:16-alpine
+        image: docker.io/library/postgres:16-alpine
         ports:
         - containerPort: 5432
         env:
         - name: POSTGRES_DB
           value: receitas
         - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: receitas-secret
-              key: DB_USER
+          value: receitas
         - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: receitas-secret
-              key: DB_PASSWORD
+          value: receitas123
         volumeMounts:
-        - name: dados
-          mountPath: /var/lib/postgresql/data
-          subPath: pgdata
-        resources:
-          requests: {cpu: "100m", memory: "128Mi"}
-          limits: {cpu: "500m", memory: "256Mi"}
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-storage
       volumes:
-      - name: dados
+      - name: postgres-storage
         persistentVolumeClaim:
           claimName: postgres-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: postgres
-spec:
-  selector:
-    app: postgres
-  ports:
-  - port: 5432
